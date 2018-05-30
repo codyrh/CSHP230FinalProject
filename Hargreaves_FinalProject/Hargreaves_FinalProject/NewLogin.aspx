@@ -1,11 +1,33 @@
-﻿<%@ Page Title="Cookies" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" %>
+﻿<%@ Page Title="New User Registration" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" %>
 
+<%@ Import Namespace="Hargreaves_FinalProject" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script runat="server">
 
         protected void buttonSubmit_Click(object sender, EventArgs e)
         {
+            Data.loginReqestData request = new Data.loginReqestData();
+            request.name = name.Text;
+            request.emailAddress = email.Text;
+            request.loginName = login.Text;
+            if (RadioButtonList1.Items[1].Selected) { request.newOrReactivate = "REACTIVATE"; }
+            else { request.newOrReactivate = "NEW"; }
+            request.reasonForAccess = reason.Text;
+            request.dateNeededBy = DateTime.Parse(DateNeeded.Text);
 
+            if (Data.loginRequest(request))
+            {
+                response.Visible = true;
+                response.ForeColor = System.Drawing.Color.Green;
+                buttonSubmit.Visible = false;
+                response.Text = "You request has been received.";
+            }
+            else
+            {
+                response.Visible = true;
+                response.ForeColor = System.Drawing.Color.Red;
+                response.Text = "An error occoured, please check your submission and try again.";
+            }
         }
 
         protected void Page_Load()
@@ -41,6 +63,7 @@
             <asp:TextBox ID="reason" runat="server" Width="471px" Height="24px" TextMode="MultiLine"></asp:TextBox><br />
             <asp:Label for="DateNeeded" runat="server" Text="Date Needed"></asp:Label><br />
             <asp:TextBox ID="DateNeeded" runat="server" TextMode="Date"></asp:TextBox><br />
+            <asp:Label ID="response" runat="server" Visible="false"></asp:Label>
             <asp:Button class="radius button" ID="buttonSubmit" runat="server" Text="Submit" OnClick="buttonSubmit_Click" /><br />
         </div>
     </div>

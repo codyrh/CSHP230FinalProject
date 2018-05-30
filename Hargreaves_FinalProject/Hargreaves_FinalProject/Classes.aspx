@@ -1,31 +1,46 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" %>
+﻿<%@ Page Title="Classes" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" %>
+
+<%@ Import Namespace="Hargreaves_FinalProject" %>
 
 <script runat="server">
 
+    
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        List<Data.classesById> classes = Data.getClassData();
+            if (classes != null)
+            {
+                foreach (Data.classesById classRegistered in classes)
+                {
+                    TableRow row = new TableRow();
+                    TableCell className = new TableCell();
+                    TableCell classDate = new TableCell();
+                    TableCell classDescription = new TableCell();
+                    className.Text = classRegistered.className;
+                    classDate.Text = classRegistered.classDate.ToShortDateString();
+                    classDescription.Text = classRegistered.classDescription;
+                    row.Cells.Add(className);
+                    row.Cells.Add(classDate);
+                    row.Cells.Add(classDescription);
+                    Table1.Rows.Add(row);
+                }
+            }
     }
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="login">
-        <p> <br />
-            <label class="classHeader">CSHP 210 PROGRAMMING IN C#</label><br />
-            <label class="classHeader">06/01/2018</label><br />
-            <label>Get an understanding of C# and .NET basic concepts in the .NET framework. Explore classes, objects, and types; defining class structures; inheritance; polymorphism; and more.</label>
-        </p>
-        <p>
-            <label class="classHeader">CSHP 220 CREATING CLIENT APPLICATION IN C#</label><br />
-            <label class="classHeader">06/01/2018</label><br />
-            <label>Study topics that include common data structures, generics, Windows forms applications, data binding to controls, DataGridView and ADO.NET and databases.</label>
-        </p>
-        <p>
-            <label class="classHeader">CSHP 230 WEB APPLICATIONS IN C#</label><br />
-            <label class="classHeader">06/01/2018</label><br />
-            <label>Study topics including HTML5, JavaScript, jQuery, OData, JSON, CSS3 and ASP.NET MVC. Undertake a final project to build a mash-up consuming web services.</label>
-        </p>
-    </div>
+
+    <br />
+    <br />
+    <asp:Label ID="Header" Font-Bold="true" ForeColor="White" Font-Size="Larger" runat="server">Upcoming classes:</asp:Label>
+    <asp:Table ForeColor="White" GridLines="Both" BorderStyle="Solid" BorderColor="White" BorderWidth="1pt" ID="Table1" runat="server" CellPadding="10">
+        <asp:TableHeaderRow runat="server">
+            <asp:TableHeaderCell runat="server">Class Name</asp:TableHeaderCell>
+            <asp:TableHeaderCell runat="server">Start Date</asp:TableHeaderCell>
+            <asp:TableHeaderCell runat="server">Description</asp:TableHeaderCell>
+        </asp:TableHeaderRow>
+
+    </asp:Table>
 </asp:Content>

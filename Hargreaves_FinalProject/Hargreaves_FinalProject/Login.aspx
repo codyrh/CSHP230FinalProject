@@ -1,26 +1,40 @@
-﻿<%@ Page Title="Cookies" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" %>
+﻿<%@ Page Title="Login" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" %>
+
+<%@ Import Namespace="Hargreaves_FinalProject" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script runat="server">
 
         protected void buttonSubmit_Click(object sender, EventArgs e)
         {
-            HttpCookie arrOfCookieData = new HttpCookie("myCookieCollection");
-            //arrOfCookieData["login"] = login.Text;
-            Response.Cookies.Add(arrOfCookieData);
+            int studentID = Data.checkLogin(userId.Text, password.Text);
+            if (studentID > 0)
+            {
+                HttpCookie arrOfCookieData = new HttpCookie("myCookieCollection");
+                arrOfCookieData["studentID"] = studentID.ToString();
+                arrOfCookieData.Expires = DateTime.Now.AddMinutes(10);
+                Response.Cookies.Add(arrOfCookieData);
+                Response.Redirect("MyClasses.aspx");
+            }
+            else
+            {
+                error.Visible = true;
+            }
         }
 
         protected void Page_Load()
         {
-            if (!IsPostBack)
+
+            HttpCookie myCookie = Request.Cookies["myCookieCollection"];
+            if (myCookie != null)
             {
-                HttpCookie myCookie = Request.Cookies["myCookieCollection"];
-                if (myCookie != null)
-                {
-                    HttpCookie arrOfCookieData = Request.Cookies["myCookieCollection"];
-                }
+                if (IsPostBack) { Response.Redirect(Request.UrlReferrer.ToString()); }
+                Response.Redirect("MyClasses.aspx");
+
             }
+
         }
+
     </script>
 
 </asp:Content>
@@ -31,22 +45,20 @@
                 <div class="bannerlogo">
                     <img src="KayodyLogo.png" id="logoGraphic" alt="Kayody LLC" class="logo">
                 </div>
-                <div id="errorDiv" style="display: none">
-                    <span id="errormsg">Incorrect User Name or Password</span>
-                </div>
                 <div id="userData">
                     <p>
                         <label for="userId">User Name</label>
                         <span role="status" aria-live="polite"></span>
-                        <input type="email" id="userId" name="employeeid" value="" class="text-input" autocomplete="off">
+                        <asp:TextBox runat="server" ID="userId" CssClass="text-input"></asp:TextBox>
                     </p>
                     <p>
                         <label for="password">Password</label>
-                        <input type="password" id="password1" name="password" class="text-input" autocomplete="off">
+                        <asp:TextBox runat="server" ID="password" CssClass="text-input" TextMode="Password"></asp:TextBox>
                     </p>
                     <p>
-                        <input type="submit" class="radius button" name="client_login" value="Sign In">
+                        <asp:Button runat="server" CssClass="radius button" Text="SIGN IN" OnClick="buttonSubmit_Click"></asp:Button>
                     </p>
+                    <asp:Label ID="error" runat="server" ForeColor="Red" Visible="false">Your username or password is incorrect</asp:Label>
                 </div>
             </div>
         </div>

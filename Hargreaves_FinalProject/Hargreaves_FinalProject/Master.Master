@@ -29,11 +29,18 @@
 
 
 
+    protected void btnLogout_Click(object sender, EventArgs e)
+    {
+        Response.Cookies["myCookieCollection"].Expires = DateTime.Now.AddDays(-1);
+        Response.Redirect("Classes.aspx");
+
+    }
 </script>
 
 <html>
 <head runat="server">
     <title>Class Registration</title>
+    <script src="Scripts/jquery-3.3.1.js"></script>
     <style>
         .header {
             background: #01426a;
@@ -59,7 +66,12 @@
 
         .classHeader {
             font-weight: bold;
-            font-size: 30px;
+            font-size: 25px;
+            color: white;
+        }
+
+        .classRow {
+            color: white;
         }
 
         h1 {
@@ -177,6 +189,7 @@
             <asp:Button ID="btnNewLogin" runat="server" Text="Create Login" Style="position: relative; top: -21px; left: 40px; height: 33px; width: 107px;" OnClick="btnNewLogin_Click" />
             <asp:Button ID="btnRegister" runat="server" Text="Register" Style="position: relative; top: -21px; left: 78px; height: 33px; width: 82px;" OnClick="btnRegister_Click" />
             <asp:Button ID="btnMyClasses" runat="server" Text="My Classes" Style="position: relative; top: -21px; left: 110px; height: 33px; width: 82px;" OnClick="btnMyClasses_Click" />
+            <asp:Button ID="btnLogout" runat="server" Text="Logout" Style="position: relative; top: -21px; left: 444px; height: 33px; width: 82px;" OnClick="btnLogout_Click" />
             <hr />
         </div>
         <div class="login">
