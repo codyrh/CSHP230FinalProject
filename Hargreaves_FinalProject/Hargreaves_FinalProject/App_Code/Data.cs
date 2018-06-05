@@ -110,18 +110,22 @@ namespace Hargreaves_FinalProject
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("pInsLoginRequest", conn);
+                SqlCommand cmd = new SqlCommand("pInsLoginRequests", conn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Name", request.name);
                 cmd.Parameters.AddWithValue("@EmailAddress", request.emailAddress);
                 cmd.Parameters.AddWithValue("@LoginName", request.loginName);
                 cmd.Parameters.AddWithValue("@NewOrReactivate", request.newOrReactivate);
                 cmd.Parameters.AddWithValue("@ReasonForAccess", request.reasonForAccess);
-                cmd.Parameters.AddWithValue("@DateNeededBy", request.dateNeededBy);
+                cmd.Parameters.AddWithValue("@DateRequiredBy", request.dateNeededBy);
 
                 SqlParameter objRC = new SqlParameter("@RC", System.Data.SqlDbType.Int);
                 objRC.Direction = System.Data.ParameterDirection.ReturnValue;
                 cmd.Parameters.Add(objRC);
+
+                SqlParameter loginID = new SqlParameter("@LoginId", System.Data.SqlDbType.Int);
+                loginID.Direction = System.Data.ParameterDirection.Output;
+                cmd.Parameters.Add(loginID);
 
                 try
                 {
